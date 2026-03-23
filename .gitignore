@@ -1,0 +1,8 @@
+# Binaries
+afterloggrator
+
+# Backup files
+*.bak
+
+# Claude Code directory
+.claude/
