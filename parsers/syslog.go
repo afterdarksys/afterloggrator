@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"os"
 	"regexp"
+	"sort"
+	"time"
 
 	"github.com/dlclark/regexp2"
 )
@@ -43,6 +45,7 @@ func NewSyslogEngine(rulesFile string) *SyslogEngine {
 				for _, r := range config.Rules {
 					re, err := regexp2.Compile(r.Match, regexp2.None)
 					if err == nil {
+						re.MatchTimeout = 100 * time.Millisecond
 						engine.ActiveRules = append(engine.ActiveRules, ParsedRule{AppID: r.AppID, Regex: re})
 					}
 				}
@@ -51,8 +54,15 @@ func NewSyslogEngine(rulesFile string) *SyslogEngine {
 		}
 	}
 
-	for app, m := range defaultRules {
+	keys := make([]string, 0, len(defaultRules))
+	for app := range defaultRules {
+		keys = append(keys, app)
+	}
+	sort.Strings(keys)
+	for _, app := range keys {
+		m := defaultRules[app]
 		re, _ := regexp2.Compile(m, regexp2.None)
+		re.MatchTimeout = 100 * time.Millisecond
 		engine.ActiveRules = append(engine.ActiveRules, ParsedRule{AppID: app, Regex: re})
 	}
 	return engine

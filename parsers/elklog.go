@@ -2,7 +2,6 @@ package parsers
 
 import (
 	"bytes"
-	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -25,21 +24,13 @@ func NewElkEngine(url, index, user, pass string) *ElkEngine {
 		User:  user,
 		Pass:  pass,
 		Client: &http.Client{
-			Timeout: 10 * time.Second,
-			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-			},
+			Timeout:       10 * time.Second,
+			CheckRedirect: func(_ *http.Request, _ []*http.Request) error { return fmt.Errorf("redirect refused") },
 		},
 	}
 }
 
 func (e *ElkEngine) Query(token string, logChan chan<- LogEntry) {
-	// Prevent panic if Elasticsearch is exceptionally slow and responds after the local file scanning finishes and closes the main aggregation channel.
-	defer func() {
-		if r := recover(); r != nil {
-			// Suppress panic: logChan closed
-		}
-	}()
 
 	if e.URL == "" || e.Index == "" {
 		return
@@ -47,8 +38,8 @@ func (e *ElkEngine) Query(token string, logChan chan<- LogEntry) {
 
 	queryBody := map[string]interface{}{
 		"query": map[string]interface{}{
-			"query_string": map[string]interface{}{
-				"query": fmt.Sprintf("\"%s\"", token),
+			"match_phrase": map[string]interface{}{
+				"message": token,
 			},
 		},
 		"size": 100,

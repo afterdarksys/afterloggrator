@@ -1,0 +1,11 @@
+{
+  "sources": [
+    {"name":"aws-prod","type":"aws","region":"us-east-1","profile":"production","resource":"/application/checkout","query":"ERROR","cluster":"aws-prod"},
+    {"name":"gcp-prod","type":"gcp","resource":"projects/YOUR_PROJECT","token_env":"GCP_LOG_TOKEN","query":"severity>=ERROR","cluster":"gke-prod"},
+    {"name":"azure-prod","type":"azure","resource":"YOUR_WORKSPACE_ID","token_env":"AZURE_LOG_TOKEN","query":"AppTraces | where SeverityLevel >= 3","cluster":"aks-prod"},
+    {"name":"oci-prod","type":"oci","region":"us-ashburn-1","profile":"DEFAULT","query":"search \"YOUR_COMPARTMENT_OCID\"","cluster":"oke-prod"},
+    {"name":"remote-app","type":"ssh","host":"host.example.com","user":"ops","key_file":"/home/ops/.ssh/id_ed25519","known_hosts":"/home/ops/.ssh/known_hosts","path":"/var/log/app.log","service":"checkout"},
+    {"name":"docker-checkout","type":"docker","context":"production","container":"checkout","host":"docker-host","cluster":"docker-prod"},
+    {"name":"k8s-checkout","type":"kubernetes","context":"production-eu","namespace":"apps","pod":"checkout-REPLACE","container":"checkout","cluster":"prod-eu"}
+  ]
+}

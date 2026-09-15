@@ -1,0 +1,6 @@
+{
+  "sources": [
+    {"name":"checkout-us","type":"file","path":"examples/checkout.log","host":"host-a","service":"checkout","container":"checkout-1","cluster":"prod-us"},
+    {"name":"database-eu","type":"file","path":"examples/database.log","host":"host-b","service":"database","container":"db-2","cluster":"prod-eu"}
+  ]
+}

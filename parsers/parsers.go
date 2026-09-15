@@ -14,6 +14,13 @@ const (
 )
 
 type LogEntry struct {
+	Source       string            `json:"source"`
+	Host         string            `json:"host,omitempty"`
+	Service      string            `json:"service,omitempty"`
+	Container    string            `json:"container,omitempty"`
+	Cluster      string            `json:"cluster,omitempty"`
+	ObservedAt   time.Time         `json:"observed_at"`
+	Correlated   bool              `json:"correlated,omitempty"`
 	Filename     string            `json:"filename"`
 	Line         string            `json:"line"`
 	Timestamp    time.Time         `json:"timestamp"`

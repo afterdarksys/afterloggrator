@@ -1,1 +1,3 @@
-./afterloggrator -d /tmp/log-test -app sshd -correlate -no-color
+#!/bin/sh
+set -eu
+go run . -sources examples/sources.json -script examples/operations.star -sort -json

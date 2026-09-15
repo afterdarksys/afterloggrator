@@ -1,3 +1,2 @@
-# DNS/RBL enrichment must be supplied upstream; filters perform no network I/O.
 def filter(event):
     return event["fields"].get("rbl_listed", "false") == "true"
